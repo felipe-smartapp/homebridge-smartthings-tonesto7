@@ -56,6 +56,8 @@ function HE_ST_Accessory(platform, device) {
     for (var index in device.capabilities) {
         if (platform.knownCapabilities.indexOf(index) === -1 && platform.unknownCapabilities.indexOf(index) === -1) {
             platform.unknownCapabilities.push(index);
+            platform.log.info('device capability: ' + index)
+
         }
     }
     that.getaddService = function(Service) {
@@ -117,11 +119,9 @@ function HE_ST_Accessory(platform, device) {
                 platform.addAttributeUsage('switch', device.deviceid, thisCharacteristic);
                 thisCharacteristic = that.getaddService(Service.Lightbulb).getCharacteristic(Characteristic.Brightness)
                     .on('get', function(callback) {
-                        platform.log('device capabilities: ' + device.capabilities)
                         callback(null, parseInt(that.device.attributes.level));
                     })
                     .on('set', function(value, callback) {
-                        platform.log('device capabilities: ' + device.capabilities)
                         platform.api.runCommand(callback, device.deviceid, 'setLevel', {
                             value1: value
                         });
