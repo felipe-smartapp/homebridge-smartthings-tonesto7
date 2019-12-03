@@ -102,7 +102,6 @@ function HE_ST_Accessory(platform, device) {
 
                 thisCharacteristic = that.getaddService(Service.WindowCovering).setCharacteristic(Characteristic.PositionState, Characteristic.PositionState.STOPPED);
             } else if (isLight === true || device.commands.setLevel) {
-                platform.log('device capabilities: ' + device.capabilities)
                 that.deviceGroup = 'lights';
                 thisCharacteristic = that.getaddService(Service.Lightbulb).getCharacteristic(Characteristic.On)
                     .on('get', function(callback) {
@@ -118,9 +117,11 @@ function HE_ST_Accessory(platform, device) {
                 platform.addAttributeUsage('switch', device.deviceid, thisCharacteristic);
                 thisCharacteristic = that.getaddService(Service.Lightbulb).getCharacteristic(Characteristic.Brightness)
                     .on('get', function(callback) {
+                        platform.log('device capabilities: ' + device.capabilities)
                         callback(null, parseInt(that.device.attributes.level));
                     })
                     .on('set', function(value, callback) {
+                        platform.log('device capabilities: ' + device.capabilities)
                         platform.api.runCommand(callback, device.deviceid, 'setLevel', {
                             value1: value
                         });
